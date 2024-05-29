@@ -1,13 +1,22 @@
 import { Section, Cell, Image, List } from '@telegram-apps/telegram-ui';
-import type { FC } from 'react';
+import {FC, useEffect} from 'react';
 
 import { Link } from '@/components/Link/Link.tsx';
+
+import {useViewport} from "@tma.js/sdk-react";
 
 import tonSvg from './ton.svg';
 
 import './IndexPage.css';
 
 export const IndexPage: FC = () => {
+    const vp = useViewport();
+    useEffect(() => {
+        if (vp) {
+            vp.expand()
+        }
+    }, [vp]);
+
   return (
     <List>
       <Section
