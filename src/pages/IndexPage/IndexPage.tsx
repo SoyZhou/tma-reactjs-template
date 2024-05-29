@@ -12,7 +12,7 @@ import './IndexPage.css';
 export const IndexPage: FC = () => {
     const vp = useViewport();
     useEffect(() => {
-        if (vp) {
+        if (vp && !vp.isExpanded) {
             vp.expand()
         }
     }, [vp]);
