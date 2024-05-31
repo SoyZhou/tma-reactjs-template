@@ -3,7 +3,7 @@ import {FC, useEffect} from 'react';
 
 import { Link } from '@/components/Link/Link.tsx';
 
-import {useViewport} from "@tma.js/sdk-react";
+import {useViewport, initUtils} from "@tma.js/sdk-react";
 
 import tonSvg from './ton.svg';
 
@@ -16,6 +16,14 @@ export const IndexPage: FC = () => {
             vp.expand()
         }
     }, [vp]);
+
+    const utils = initUtils();
+
+    const share = () => {
+        utils.openTelegramLink(
+            'https://t.me/share/url?url=https://t.me/MiniAppLocalTestBot/app'
+        );
+    }
 
   return (
     <List>
@@ -46,6 +54,9 @@ export const IndexPage: FC = () => {
           <Cell subtitle='Telegram application palette information'>Theme Parameters</Cell>
         </Link>
       </Section>
+        <Section>
+            <Cell onClick={share}>Share this mini app</Cell>
+        </Section>
     </List>
   );
 };
