@@ -24,6 +24,11 @@ export const IndexPage: FC = () => {
             'https://t.me/share/url?url=https://t.me/MiniAppLocalTestBot/app'
         );
     }
+    const goToChannel = () => {
+        utils.openTelegramLink(
+            'https://t.me/MiniAppLocalTestBot'
+        );
+    }
 
   return (
     <List>
@@ -55,7 +60,8 @@ export const IndexPage: FC = () => {
         </Link>
       </Section>
         <Section>
-            <Cell onClick={share}>Share this mini app</Cell>
+            <Cell onClick={share}>Share this mini app to a group</Cell>
+            <Cell onClick={goToChannel}>Open Channel</Cell>
         </Section>
     </List>
   );
