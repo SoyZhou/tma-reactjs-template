@@ -30,6 +30,12 @@ export const IndexPage: FC = () => {
         );
     }
 
+    const goToExternal = () => {
+        utils.openLink(
+            'https://google.com'
+        );
+    }
+
   return (
     <List>
       <Section
@@ -62,6 +68,7 @@ export const IndexPage: FC = () => {
         <Section>
             <Cell onClick={share}>Share this mini app to a group</Cell>
             <Cell onClick={goToChannel}>Open Channel</Cell>
+            <Cell onClick={goToExternal}>Open external url</Cell>
         </Section>
     </List>
   );
