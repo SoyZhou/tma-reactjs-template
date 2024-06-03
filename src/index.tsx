@@ -54,4 +54,7 @@ if (import.meta.env.DEV) {
   }
 }
 
+console.log(window.Telegram.WebApp)
+console.log(window.TelegramGameProxy.initParams)
+
 ReactDOM.createRoot(document.getElementById('root')!).render(<Root/>);
