@@ -45,43 +45,49 @@ export const IndexPage: FC = () => {
     const initiateStarsPurchase = (productName: string, price: number) => {
         if (!tg) return;
 
-        const invoiceParams = {
-            title: productName,
-            description: `Purchase ${productName} using Stars`,
-            payload: JSON.stringify({productId: 'unique_id'}),
-            provider_token: 'YOUR_PROVIDER_TOKEN', // 替换为您的 provider token
-            currency: 'STARS',
-            prices: [{label: productName, amount: price * 100}],
-        };
-
-        tg.showPopup({
-            title: 'Confirm Purchase',
-            message: `Are you sure you want to buy ${productName} for ${price} Stars?`,
-            buttons: [
-                {id: 'cancel', type: 'cancel', text: 'Cancel'},
-                {id: 'buy', type: 'ok', text: 'Buy'}
-            ]
-        }, (buttonId: string) => {
-            if (buttonId === 'buy') {
-                tg.openInvoice(invoiceParams, (status: string) => {
-                    if (status === 'paid') {
+        tg.showConfirm(`Are you sure you want to buy ${productName} for ${price} Stars?`, (confirmed: any) => {
+            if (confirmed) {
+                // 这里应该调用您的后端 API 来处理 Stars 支付
+                // 例如：
+                fetch('/api/purchase-with-stars', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        productName,
+                        price,
+                        userId: tg.initDataUnsafe?.user?.id,
+                        // 其他必要的信息
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            tg.showPopup({
+                                title: 'Purchase Successful',
+                                message: 'Thank you for your purchase!',
+                                buttons: [{type: 'ok'}]
+                            });
+                        } else {
+                            tg.showPopup({
+                                title: 'Purchase Failed',
+                                message: data.message || 'Sorry, the purchase was not completed.',
+                                buttons: [{type: 'ok'}]
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
                         tg.showPopup({
-                            title: 'Purchase Successful',
-                            message: 'Thank you for your purchase!',
+                            title: 'Error',
+                            message: 'An error occurred while processing your purchase.',
                             buttons: [{type: 'ok'}]
                         });
-                    } else {
-                        tg.showPopup({
-                            title: 'Purchase Failed',
-                            message: `Sorry, the purchase was not completed. Status: ${status}`,
-                            buttons: [{type: 'ok'}]
-                        });
-                    }
-                });
+                    });
             }
         });
     }
-
     return (
         <List>
             <Section
