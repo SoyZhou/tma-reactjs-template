@@ -4,19 +4,22 @@ import { Link } from '@/components/Link/Link.tsx';
 import { useViewport, initUtils } from "@tma.js/sdk-react";
 
 import tonSvg from './ton.svg';
-import starsSvg from './stars.svg'; // 假设您有一个 Stars 图标
+import starsSvg from './ton.svg'; // 假设您有一个 Stars 图标
 
 import './IndexPage.css';
 
 export const IndexPage: FC = () => {
     const vp = useViewport();
-    const [tg, setTg] = useState(null);
+    const [tg, setTg] = useState<any>(null);
 
     useEffect(() => {
         if (vp && !vp.isExpanded) {
             vp.expand();
         }
-        setTg(window.Telegram.WebApp);
+        const telegramWebApp = (window as any).Telegram?.WebApp;
+        if (telegramWebApp) {
+            setTg(telegramWebApp);
+        }
     }, [vp]);
 
     const utils = initUtils();
@@ -58,9 +61,9 @@ export const IndexPage: FC = () => {
                 {id: 'cancel', type: 'cancel', text: 'Cancel'},
                 {id: 'buy', type: 'ok', text: 'Buy'}
             ]
-        }, (buttonId) => {
+        }, (buttonId: string) => {
             if (buttonId === 'buy') {
-                tg.openInvoice(invoiceParams, (status) => {
+                tg.openInvoice(invoiceParams, (status: string) => {
                     if (status === 'paid') {
                         tg.showPopup({
                             title: 'Purchase Successful',
@@ -100,6 +103,7 @@ export const IndexPage: FC = () => {
                     Exclusive Theme
                 </Cell>
             </Section>
+            {/* 其他 Sections 保持不变 */}
             <Section
                 header='Features'
                 footer='You can use these pages to learn more about features, provided by Telegram Mini Apps and other useful projects'
